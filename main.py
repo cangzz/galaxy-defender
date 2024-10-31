@@ -1,4 +1,5 @@
 import pygame
+import random
 
 class Game:
     def __init__(self, width, height):
@@ -10,6 +11,10 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         self.spaceship = Spaceship(self, 370, 515)
+
+        self.enemies = []
+        for i in range(12):
+            self.enemies.append(Enemy(self, random.randint(0, 736), random.randint(30, 130)))
 
         self.background_img = pygame.image.load("img/background.png")    # Background image src <<<<
 
@@ -44,6 +49,10 @@ class Game:
                         bullet.update()
                     else:
                         self.spaceship.bullets.remove(bullet)
+
+
+            for enemy in self.enemies:
+                enemy.update()
 
             
             pygame.display.update()
@@ -94,6 +103,26 @@ class Bullet:
         if self.y < 0:
             self.is_fired = False
         self.game.screen.blit(self.bullet_img, (self.x, self.y))
+
+
+class Enemy:
+    def __init__(self, game, x, y):
+        self.game = game
+        self.x = x
+        self.y = y
+        self.change_x = 5
+        self.change_y = 60
+        self.enemy_img = pygame.image.load("img/enemy.png")    # Enemy image src <<<<
+
+    def update(self):
+        self.x += self.change_x                         # dynamic movement aliens <<<<  
+        if self.x > 736:                                
+            self.y += self.change_y                       
+            self.change_x = -5
+        elif self.x <= 0:  
+            self.y += self.change_y
+            self.change_x = 5                        
+        self.game.screen.blit(self.enemy_img, (self.x, self.y))
 
 
 if __name__ == "__main__":
