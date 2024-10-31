@@ -114,6 +114,14 @@ class Enemy:
         self.change_y = 60
         self.enemy_img = pygame.image.load("img/enemy.png")    # Enemy image src <<<<
 
+    def check_collision(self):
+        for bullet in self.game.spaceship.bullets:
+            distance = math.sqrt(math.pow(self.x - bullet.x, 2) + math.pow(self.y - bullet.y, 2))   # distance calculation  <<<<
+            if distance < 35:
+                bullet.is_fired = False
+                self.x = random.randint(0, 736)
+                self.y = random.randint(50, 150)
+
     def update(self):
         self.x += self.change_x                         # dynamic movement aliens <<<<  
         if self.x > 736:                                
